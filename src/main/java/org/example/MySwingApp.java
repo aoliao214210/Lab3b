@@ -64,7 +64,7 @@ public class MySwingApp extends JFrame {
         generateNewTextButton = new JButton("Generate New Text");
         shortestPathButton = new JButton("Shortest Path");
         randomWalkButton = new JButton("Random Walk");
-        stopWalkButton = new JButton("Stop");
+        stopWalkButton = new JButton("Random Walk Stop");
 
         // 设置事件
         addButtonActions();
@@ -287,7 +287,8 @@ public class MySwingApp extends JFrame {
 
     // 停止游走事件
     private void stopWalkAction(){
-        textGraph.toStop = true;
+        outputArea.setText("开始随机游走，在命令行中操作");
+        textGraph.randomWalk_stop();
+        outputArea.setText("结束！");
     }
-
 }

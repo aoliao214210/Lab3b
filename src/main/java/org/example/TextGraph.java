@@ -189,6 +189,8 @@ public class TextGraph {
         return allPaths;
     }
 
+
+
     public int calculatePathLength(List<String> path) {
         int length = 0;
         for (int i = 0; i < path.size() - 1; i++) {
@@ -254,4 +256,51 @@ public class TextGraph {
         System.out.println("Edges traversed: " + traversedEdges);
     }
 
+    public void randomWalk_stop() {
+        List<String> traversedNodes = new ArrayList<>();
+        List<String> traversedEdges = new ArrayList<>();
+        String currentNode = getRandomNode();
+        traversedNodes.add(currentNode);
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("traversal_output.txt"))) {
+            writer.write(currentNode + " ");
+            System.out.println("当前节点: " + currentNode);
+            while (true) {
+                Map<String, Integer> edges = graph.get(currentNode);
+                if (edges == null || edges.isEmpty()) {
+                    writer.write(currentNode + " ");
+                    break;
+                }
+
+                List<String> possibleNextNodes = new ArrayList<>(edges.keySet());
+                String nextNode = possibleNextNodes.get(random.nextInt(possibleNextNodes.size()));
+                traversedEdges.add(currentNode + " -> " + nextNode);
+                currentNode = nextNode;
+                traversedNodes.add(currentNode);
+
+                if (traversedNodes.size() != new HashSet<>(traversedNodes).size()) {
+                    writer.write(currentNode + " ");
+                    break;
+                }
+
+                writer.write(currentNode + " ");
+
+                // ����û��Ƿ���Ҫֹͣ����
+                System.out.println("当前节点: " + currentNode);
+                System.out.println("路径: " + String.join(" -> ", traversedNodes));
+                System.out.println("Enter 'stop' to stop traversal, or press Enter to continue:");
+                Scanner scanner = new Scanner(System.in);
+                String input = scanner.nextLine();
+                if ("stop".equalsIgnoreCase(input.trim())) {
+                    writer.write("\n"+"Traversal stopped by user.");
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Traversal completed. Nodes traversed: " + traversedNodes);
+        System.out.println("Edges traversed: " + traversedEdges);
+    }
 }
